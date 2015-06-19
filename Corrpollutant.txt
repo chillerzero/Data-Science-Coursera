@@ -1,0 +1,27 @@
+#Function that reads a directory full of files and reports the number of completely observed cases 
+#in each data file. The function should return a data frame where the first column is the 
+#name of the file and the second column is the number of complete cases
+
+corr <- function(directory, threshold = 0) {
+    files <- list.files(directory, full.names = TRUE);#attain the list of files in specdata assign to files
+    correlationList <- c();     #create the dataframe correlationlist
+    index <- 1;                 #set the index to the first file in the list for th while loop to itterate through list
+    
+    while (index <= length(files)) {   #itterate through the entire lenght of files starting at file 1 index
+      completeCases <- complete(directory, index); #call the completecomplete functions to get complete
+      
+      if (completeCases$nobs > threshold) {    #create subset, pulls out nobs from completecases columns and then if is higher than the threshold then read 
+        data <- read.csv(files[index], comment.char = ""); # read each file into a data frame called data, turns off characters 
+        #"" turns off interpredation of comments in data all together 
+        ##use decides what to do with missing data
+        ##complete.obs deletes it
+        correlationList <- c(correlationList, cor(data$sulfate, data$nitrate, use = "complete.obs"));
+        #takes prev block and prints, does correlaton on dataframe/sulfate subset, etc. complete.obs to remove na
+      }
+      index <- index + 1; #increase index to go to next rise after condition
+    }
+    #returrn the list of correlated observations 
+    correlationList;
+  }
+
+
